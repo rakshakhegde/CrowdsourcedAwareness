@@ -11,7 +11,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view2">
+<link rel="import" href="../bower_components/paper-input/all-imports.html">
+
+
+<dom-module id="upload-view">
   <template>
     <style include="shared-styles">
       :host {
@@ -19,19 +22,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+      @media (min-width: 640px) {
+        .card {
+          width: 40vw;
+          margin: auto;
+        }
+      }
     </style>
 
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <paper-input label="Title"></paper-input>
+      <paper-textarea label="Description"></paper-textarea>
     </div>
   </template>
 
   <script>
     Polymer({
-      is: 'my-view2'
+      is: 'upload-view'
     });
   </script>
 </dom-module>
