@@ -23,6 +23,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="my-icons.html">
 
+<!-- Custom imports -->
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 <dom-module id="my-app">
   <template>
     <style>
@@ -62,7 +67,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         font-weight: bold;
       }
+
+      app-toolbar paper-fab {
+        position: absolute;
+        right: 2em;
+        bottom: -1.3em;
+      }
     </style>
+
+    <firebase-app
+      auth-domain="crowdsourced-aa9dc.firebaseapp.com"
+      database-url="https://crowdsourced-aa9dc.firebaseio.com"
+      api-key="AIzaSyD5l1YFxcZCYIKV1ckdBxldExCERWA4Tqo"
+      storage-bucket="crowdsourced-aa9dc.appspot.com"
+      ></firebase-app>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -89,6 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Crowdsourced Awareness</div>
+            <paper-fab icon="add"></paper-fab>
           </app-toolbar>
         </app-header>
 

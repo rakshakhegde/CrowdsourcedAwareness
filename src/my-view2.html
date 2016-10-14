@@ -14,6 +14,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- Custom imports -->
 <link rel="import" href="../bower_components/google-map/google-map-elements.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 
 <dom-module id="my-view2">
   <template>
@@ -23,19 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       google-map {
-        height: 80vh;
+        height: 90vh;
       }
     </style>
-
-    <firebase-app
-      auth-domain="crowdsourced-aa9dc.firebaseapp.com"
-      database-url="https://crowdsourced-aa9dc.firebaseio.com"
-      api-key="AIzaSyD5l1YFxcZCYIKV1ckdBxldExCERWA4Tqo"
-      storage-bucket="crowdsourced-aa9dc.appspot.com"
-      ></firebase-app>
     
     <firebase-query
-      path="/issue"
+      path="/issues"
       data="{{issues}}"
       log="true"
       ></firebase-query>
@@ -55,7 +51,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           >
           <span>{{issue.title}}</span>
           <br/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/San_Francisco_Giants_Cap_Insignia.svg/200px-San_Francisco_Giants_Cap_Insignia.svg.png" />
+          <img style="height:200px; background-color: lightgray;"
+  sizing="cover" src="[[issue.thumb]]"></img>
+
           </google-map-marker>
       </template>
     </google-map>
@@ -76,6 +74,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       issuesChanged: function (newData, oldData) {
         // do something when the query returns values
         console.log('IssuesChanged:', newData, oldData);
+      },
+
+      firstImageUrl: function(images) {
+        var imageUrl = images[Object.keys(images)[0]];
+        console.log(imageUrl);
+        return imageUrl;
       }
     });
   </script>
