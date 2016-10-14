@@ -1,0 +1,82 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<!-- Custom imports -->
+<link rel="import" href="../bower_components/google-map/google-map-elements.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+<dom-module id="my-view2">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+      google-map {
+        height: 80vh;
+      }
+    </style>
+
+    <firebase-app
+      auth-domain="crowdsourced-aa9dc.firebaseapp.com"
+      database-url="https://crowdsourced-aa9dc.firebaseio.com"
+      api-key="AIzaSyD5l1YFxcZCYIKV1ckdBxldExCERWA4Tqo"
+      storage-bucket="crowdsourced-aa9dc.appspot.com"
+      ></firebase-app>
+    
+    <firebase-query
+      path="/issue"
+      data="{{issues}}"
+      log="true"
+      ></firebase-query>
+
+    <google-map
+      latitude="12.9716"
+      longitude="77.5946"
+      fit-to-markers
+      api-key="AIzaSyBYABQ5lETBoiM785MFAgI-fUFavgfNNOg">
+
+      <template is="dom-repeat" items="{{issues}}" as="issue">
+
+        <google-map-marker
+          latitude="{{issue.coords.lat}}"
+          longitude="{{issue.coords.lng}}"
+          title="{{issue.title}}"
+          >
+          <span>{{issue.title}}</span>
+          <br/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/San_Francisco_Giants_Cap_Insignia.svg/200px-San_Francisco_Giants_Cap_Insignia.svg.png" />
+          </google-map-marker>
+      </template>
+    </google-map>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-view2',
+
+      properties: {
+        issues: {
+          type: Object,
+          observer: 'issuesChanged'
+        }
+      },
+
+      issuesChanged: function (newData, oldData) {
+        // do something when the query returns values
+        console.log('IssuesChanged:', newData, oldData);
+      }
+    });
+  </script>
+</dom-module>
