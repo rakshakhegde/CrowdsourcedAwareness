@@ -33,13 +33,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-document
-      path="/notes"
+      path="/notes/{{user.uid}}"
       data="{{noteData}}">
     </firebase-document>
 
     <geo-location
-      latitude="{{coords.lat}}"
-      longitude="{{coords.lng}}"
+      latitude="{{noteData.lat}}"
+      longitude="{{noteData.lng}}"
       watch-pos high-accuracy
       ></geo-location>
 
@@ -60,16 +60,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           observer: 'fbAppChanged'
         },
+        user: {
+          type: Object,
+          observer: 'userChanged'
+        },
         coords: {
           type: Object,
           observer: 'geolocationChanged'
         }
-      },
-
-      fbAppChanged: function (fbApp) {
-        // do something when the query returns values
-        firApp = fbApp;
-        console.log('fbAppChanged:', fbApp, fbApp);
       },
 
       geoLocationChanged: function(coords) {
