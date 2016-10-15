@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/geo-location/geo-location.html">
 
 <link rel="import" href="my-icons.html">
 
@@ -32,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --app-primary-color: #2196f3;
         --app-secondary-color: black;
+        --paper-button-ink-color: #42a5f5;
 
         display: block;
       }
@@ -67,6 +69,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <geo-location
+      latitude="{{lat}}"
+      longitude="{{lng}}"
+      watch-pos high-accuracy
+      ></geo-location>
+
     <firebase-app
       auth-domain="crowdsourced-aa9dc.firebaseapp.com"
       database-url="https://crowdsourced-aa9dc.firebaseio.com"
@@ -93,11 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer>
         <app-toolbar style="background: #90caf9;">Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <!--<a name="sign-in" href="/my-view2" hidden=[[!!user]]>Sign In</a>-->
-          <a name="my-view1" href="/my-view1">Landing</a>
-          <a name="my-view2" href="/my-view2">Map View</a>
-          <a name="my-view3" href="/my-view3">Organizations</a>
-          <a name="upload-view" href="/upload-view">Upload View</a>
+          <a name="map-view" href="/map-view" lat="{{lat}}" lng="{{lng}}">Map View</a>
+          <!--<a name="my-view3" href="/my-view3">Organizations</a>-->
+          <a name="upload-view" href="/upload-view" lat="{{lat}}" lng="{{lng}}">Upload View</a>
         </iron-selector>
       </app-drawer>
 
@@ -107,8 +113,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>Crowdsourced Awareness</div>
+            <div main-title>Crowdsourced</div>
             <paper-button hidden$="{{user}}" on-tap="signIn">Sign In</paper-button>
+            <paper-button hidden$="{{!user}}" on-tap="signOut">Sign Out</paper-button>
           </app-toolbar>
         </app-header>
 
@@ -117,8 +124,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="my-view404"
             role="main">
-          <my-view1 name="my-view1"></my-view1>
-          <my-view2 name="my-view2"></my-view2>
+          <map-view name="map-view"></map-view>
           <my-view3 name="my-view3"></my-view3>
           <upload-view name="upload-view" firebase-app=[[firebaseApp]] user=[[user]]></upload-view>
           <my-view404 name="my-view404"></my-view404>
@@ -143,12 +149,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.auth.signInWithPopup();
       },
 
+      signOut: function() {
+        this.$.auth.signOut();
+      },
+
       observers: [
         '_routePageChanged(routeData.page)'
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'my-view1';
+        this.page = page || 'map-view';
       },
 
       _pageChanged: function(page) {

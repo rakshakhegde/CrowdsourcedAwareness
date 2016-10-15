@@ -33,13 +33,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-document
-      path="/notes/{{user.uid}}"
-      data="{{noteData}}">
+      path="/issues/{{user.uid}}"
+      data="{{issue}}">
     </firebase-document>
 
     <geo-location
-      latitude="{{noteData.lat}}"
-      longitude="{{noteData.lng}}"
+      latitude="{{issue.coords.lat}}"
+      longitude="{{issue.coords.lng}}"
       watch-pos high-accuracy
       ></geo-location>
 
@@ -47,7 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h2>New Issue</h2>
       <paper-input label="Title" value={{noteData.noteTitle}}></paper-input>
       <paper-textarea label="Description" value={{noteData.description}}></paper-textarea>
-      <vaadin-upload style="margin: 20px 0px;"></vaadin-upload>
+      <vaadin-upload
+        style="margin: 20px 0px;"
+        on-upload-start="uploadStarted"
+        target="{{targetUrl}}"
+        ></vaadin-upload>
     </div>
   </template>
 
@@ -57,17 +61,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         firebaseApp: {
-          type: Object,
-          observer: 'fbAppChanged'
+          type: Object
         },
         user: {
-          type: Object,
-          observer: 'userChanged'
+          type: Object
         },
         coords: {
           type: Object,
           observer: 'geolocationChanged'
+        },
+        lat: {
+          type: String
+        },
+        lng: {
+          type: String
         }
+      },
+
+      ready: function() {
+        var uploader = this.$$('vaadin-upload');
+        console.log(uploader, uploader.target);
+        this.targetUrl = this.mkFirBaseStorageUrl()
+      },
+
+      mkFirBaseStorageUrl: function() {
+        var storage = this.firebaseApp.storage();
+        return storage.ref('image.jpg').getDownloadURL();
+      },
+
+      uploadStarted: function(event) {
+        console.log('event', event);
+        console.log(this, this.$$);
+        var uploader = Polymer.dom(this.root).querySelector('vaadin-upload');
+        console.log(uploader);
+      },
+
+      uploadStarted: function(event) {
+        alert("Uploading " + event.detail.file.name);
       },
 
       geoLocationChanged: function(coords) {
