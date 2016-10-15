@@ -72,7 +72,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       database-url="https://crowdsourced-aa9dc.firebaseio.com"
       api-key="AIzaSyD5l1YFxcZCYIKV1ckdBxldExCERWA4Tqo"
       storage-bucket="crowdsourced-aa9dc.appspot.com"
+      app={{firebaseApp}}
       ></firebase-app>
+
+    <firebase-auth
+      id="auth"
+      user="{{user}}"
+      ></firebase-auth>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -86,6 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <!--<a name="sign-in" href="/my-view2" hidden=[[!!user]]>Sign In</a>-->
           <a name="my-view1" href="/my-view1">Landing</a>
           <a name="my-view2" href="/my-view2">Map View</a>
           <a name="my-view3" href="/my-view3">Organizations</a>
@@ -111,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-view1 name="my-view1"></my-view1>
           <my-view2 name="my-view2"></my-view2>
           <my-view3 name="my-view3"></my-view3>
-          <upload-view name="upload-view"></upload-view>
+          <upload-view name="upload-view" firebase-app=[[firebaseApp]]></upload-view>
           <my-view404 name="my-view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -127,6 +134,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+        user: {
+          type: Object,
+          observer: 'userChanged'
+        }
+      },
+
+      userChanged: function(user) {
+        console.log(this.$.auth, this.$.auth.signedIn, this.$.auth.statusKnown, this.$.auth.user, user);
+        if(!this.$.signedIn) {
+          //this.$.auth.signInAnonymously();
+        } else {
+          //console.log(user);
         }
       },
 

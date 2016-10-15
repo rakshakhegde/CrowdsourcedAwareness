@@ -1,0 +1,20 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] CLI Version:  3.0.0
+[debug] Platform:     darwin
+[debug] Node Version: v6.1.0
+[debug] Time:         Sat Oct 15 2016 07:21:53 GMT+0530 (IST)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/crowdsourced-aa9dc 
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/crowdsourced-aa9dc/tokens 
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'crowdsourced-aa9dc'...
+[info] 
+[info] i  deploying database, hosting
+[info] i  hosting: preparing . directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/crowdsourced-aa9dc/uploads/-KU51TZ0RYYpPwTU3ArA?fileCount=1195&message= 
+[debug] <<< HTTP RESPONSE 200
