@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/lazyload-image/lazyload-image.html">
-<link rel="import" href="../bower_components/geo-location/geo-location.html">
+<link rel="import" href="../bower_components/lazyload-image/lazyload-image.html">
 
 <dom-module id="map-view">
   <template>
@@ -44,22 +44,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       data="{{issues}}"
       log="true"
       ></firebase-query>
-
-    <geo-location
-      latitude="{{lat}}"
-      longitude="{{lng}}"
-      watch-pos high-accuracy
-      ></geo-location>
+    
+    <firebase-query
+      path="/headshots"
+      data="{{headshots}}"
+      log="true"
+      ></firebase-query>
 
     <google-map
       fit-to-markers
       api-key="AIzaSyBYABQ5lETBoiM785MFAgI-fUFavgfNNOg">
       
-      <google-map-marker
+      <!--<google-map-marker
         icon="https://storelocator.api.lorealebusiness.com/images/currentLocationimg.png"
         latitude="{{lat}}"
         longitude="{{lng}}"
-      ></google-map-marker>
+      ></google-map-marker>-->
 
       <template is="dom-repeat" items="{{issues}}" as="issue">
 
@@ -70,10 +70,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           >
           <span>{{issue.title}}</span>
           <br/>
+          <h5>{{issue.description}}</h5>
+          <br/>
           <img is="lazyload-image" style="height:200px; background-color: lightgray;"
-  sizing="cover" src="[[issue.thumb]]"></img>
+  sizing="cover" src="[[firstImageUrl(issue.images)]]"></img>
+          <br/>
+          <facebook-button></facebook-button>
 
-          </google-map-marker>
+        </google-map-marker>
+      </template>
+
+      <template is="dom-repeat" items="{{headshots}}" as="headshot">
+
+        <google-map-marker
+          latitude="{{headshot.lat}}"
+          longitude="{{headshot.lng}}"
+          icon="[[scaled(headshot.image)]]"
+          >
+        </google-map-marker>
       </template>
     </google-map>
 
@@ -107,6 +121,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var imageUrl = images[Object.keys(images)[0]];
         console.log(imageUrl);
         return imageUrl;
+      },
+
+      scaled: function(iconUrl) {
+        return {
+            url: iconUrl,
+            scaledSize: new google.maps.Size(40, 40)
+        };
       }
     });
   </script>

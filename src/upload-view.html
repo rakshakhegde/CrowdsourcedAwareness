@@ -33,24 +33,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-document
-      path="/issues/{{user.uid}}"
-      data="{{issue}}">
-    </firebase-document>
-
-    <geo-location
-      latitude="{{issue.coords.lat}}"
-      longitude="{{issue.coords.lng}}"
-      watch-pos high-accuracy
-      ></geo-location>
+      path="/issues/{{issueKey}}"
+      data="{{issue}}"
+      log="true"
+      ></firebase-document>
 
     <div class="card">
       <h2>New Issue</h2>
-      <paper-input label="Title" value={{noteData.noteTitle}}></paper-input>
-      <paper-textarea label="Description" value={{noteData.description}}></paper-textarea>
+      <paper-input label="Title" value={{issue.title}}></paper-input>
+      <paper-textarea label="Description" value={{issue.description}}></paper-textarea>
+      <span>Latitude: {{lat}}</span>
+      <br/>
+      <span>Longitude: {{lng}}</span>
       <vaadin-upload
         style="margin: 20px 0px;"
-        on-upload-start="uploadStarted"
-        target="{{targetUrl}}"
+        on-upload-before="beforeUpload"
+        on-upload-success="successfulUpload"
+        target="https://firebasestorage.googleapis.com/v0/b/crowdsourced-aa9dc.appspot.com/o/{{fileName}}"
         ></vaadin-upload>
     </div>
   </template>
@@ -66,38 +65,60 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user: {
           type: Object
         },
-        coords: {
-          type: Object,
-          observer: 'geolocationChanged'
-        },
         lat: {
-          type: String
+          type: String,
+          observer: 'latChanged'
         },
         lng: {
+          type: String,
+          observer: 'lngChanged'
+        },
+        issueKey: {
           type: String
         }
       },
 
       ready: function() {
-        var uploader = this.$$('vaadin-upload');
-        console.log(uploader, uploader.target);
-        this.targetUrl = this.mkFirBaseStorageUrl()
+        // Exe when Polymer is ready
+        var db = this.firebaseApp.database();
+        var key = db.ref('issues').push().key;
+        console.log('issueKey', key);
+        this.issueKey = key;
       },
 
-      mkFirBaseStorageUrl: function() {
-        var storage = this.firebaseApp.storage();
-        return storage.ref('image.jpg').getDownloadURL();
+      latChanged: function(lat) {
+        console.log('Latitude', lat);
+        this.issue.coords = this.issue.coords || {};
+        this.issue.coords.lat = lat;
       },
 
-      uploadStarted: function(event) {
-        console.log('event', event);
-        console.log(this, this.$$);
-        var uploader = Polymer.dom(this.root).querySelector('vaadin-upload');
-        console.log(uploader);
+      lngChanged: function(lng) {
+        console.log('Longitude', lng);
+        this.issue.coords = this.issue.coords || {};
+        this.issue.coords.lng = lng;
       },
 
-      uploadStarted: function(event) {
-        alert("Uploading " + event.detail.file.name);
+      mkFirBaseStorageKey: function() {
+        var db = this.firebaseApp.database();
+        //var uid = this.user.uid;
+        //console.log('uid', uid);
+        var key = db.ref('issues').push().key;
+        console.log('key', key);
+        return key;
+      },
+
+      beforeUpload: function(event) {
+        console.log('beforeUpload');
+        //this.fileName = this.mkFirBaseStorageKey();
+        this.fileName = this.mkFirBaseStorageKey() + event.detail.file.name;
+        console.log('fileName', this.fileName);
+      },
+
+      successfulUpload: function(event) {
+        console.log('successfulUpload');
+        var fileTarget = event.detail.file.uploadTarget;
+        var db = this.firebaseApp.database();
+        db.ref('issues/' + this.issueKey + '/images').push(fileTarget);
       },
 
       geoLocationChanged: function(coords) {

@@ -103,7 +103,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="map-view" href="/map-view" lat="{{lat}}" lng="{{lng}}">Map View</a>
           <!--<a name="my-view3" href="/my-view3">Organizations</a>-->
-          <a name="upload-view" href="/upload-view" lat="{{lat}}" lng="{{lng}}">Upload View</a>
+          <a name="upload-view" href="/upload-view" lat="{{lat}}" lng="{{lng}}" user={{user}}>Upload Issue</a>
+          <a name="activity-view" href="/activity-view">Activity Feed</a>
         </iron-selector>
       </app-drawer>
 
@@ -125,8 +126,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="my-view404"
             role="main">
           <map-view name="map-view"></map-view>
-          <my-view3 name="my-view3"></my-view3>
           <upload-view name="upload-view" firebase-app=[[firebaseApp]] user=[[user]]></upload-view>
+          <activity-view name="activity-view"></activity-view>
           <my-view404 name="my-view404"></my-view404>
         </iron-pages>
       </app-header-layout>
