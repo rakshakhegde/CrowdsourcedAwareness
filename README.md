@@ -10,3 +10,5 @@ So, to enable you and every citizen contribute and inform the NGO + Cleanliness 
 For the sake of simplicity:
 - You can make a post describing the issue around you along with pics to support it
 - Look at the problems around you in an easy-to-use Map View
+
+Visit https://goo.gl/NyHXyO to use the live Progressive Web App.
